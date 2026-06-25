@@ -305,8 +305,9 @@ No.27/28 で授受するCSVの列定義。文字コードはUTF-8、1行目は�
 
 | No | 列名（ヘッダ） | 必須 | 形式・制約 | 対応カラム |
 |---|---|---|---|---|
-<!-- TODO(human): 顧客インポート/エクスポートのCSV列を定義する。4.2 CUSTOMERSテーブルを基準に、
-     どの列をCSVに含めるか・必須か・担当営業をどう表現するか・会社名重複をどう扱うかを埋める。 -->
+| 1 | company_name | ◯ | VARCHAR(100) | CUSTOMERS.company_name |
+| 2 | contact_person |  | VARCHAR(50) | CUSTOMERS.contact_person |
+| 3 | user_id | ◯ | BIGINT。社内ツール出力のIDをそのまま使用 | CUSTOMERS.user_id |
 
 ← **RDD**：追加要素「REST API設計」/ ページネーション・検索・ソート
 
