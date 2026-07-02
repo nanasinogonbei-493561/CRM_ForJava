@@ -83,6 +83,24 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		  <!-- Flyway 本体 -->
+         <dependency>
+              <groupId>org.flywaydb</groupId>
+              <artifactId>flyway-core</artifactId>
+         </dependency>
+
+          <!-- ★DB専用モジュール（使うDBに合わせて選ぶ）-->
+         <dependency>
+               <groupId>org.flywaydb</groupId>
+               <artifactId>flyway-mysql</artifactId>
+         </dependency>
+		 <!-- ★新しい座標 -->
+         <dependency>
+               <groupId>com.mysql</groupId>
+               <artifactId>mysql-connector-j</artifactId>
+               <scope>runtime</scope>
+         </dependency>
+
 	</dependencies>
 
 	<build>
