@@ -1,15 +1,11 @@
 package com.example.Service;
 
-import javax.management.relation.Role;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.Repository.UserRepository;
 import com.example.Entity.*;
+import com.example.Enum.Role;
 
 import lombok.RequiredArgsConstructor;
 

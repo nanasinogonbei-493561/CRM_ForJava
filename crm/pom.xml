@@ -84,22 +84,28 @@
 			<scope>test</scope>
 		</dependency>
 		  <!-- Flyway 本体 -->
-         <dependency>
+        <dependency>
               <groupId>org.flywaydb</groupId>
               <artifactId>flyway-core</artifactId>
-         </dependency>
+        </dependency>
 
           <!-- ★DB専用モジュール（使うDBに合わせて選ぶ）-->
-         <dependency>
+        <dependency>
                <groupId>org.flywaydb</groupId>
                <artifactId>flyway-mysql</artifactId>
-         </dependency>
-		 <!-- ★新しい座標 -->
-         <dependency>
-               <groupId>com.mysql</groupId>
-               <artifactId>mysql-connector-j</artifactId>
-               <scope>runtime</scope>
-         </dependency>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 	</dependencies>
 

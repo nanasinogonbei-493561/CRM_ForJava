@@ -23,7 +23,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
-@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
 @SQLRestriction("is_deleted = false")
 // ユーザーテーブルのモノ(データ、状態)を定義。
 public class User {
@@ -61,7 +61,7 @@ public class User {
         private Instant created_at;
 
         protected User() {} // JPA専用。業務コードからは使わない。
-        
+
         public User(String name, String email, Role role, String passwordHash) {
             this.name = name;
             this.email = email;
@@ -138,5 +138,10 @@ public class User {
 
         public Instant getCreatedAt() {
             return this.created_at;
+        }
+
+        public void recordLoginFailure() {
+            this.failed_login_count++;
+            if (this.failed_login_count >= MAX_FAILED_ATTEMPTS) this.locked = true;
         }
 }
