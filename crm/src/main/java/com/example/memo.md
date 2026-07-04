@@ -34,3 +34,13 @@ public class UserService {
     }
 }
 ```
+
+2026/07/04/17:12
+バグ修正しながら責務の分離をしていたが、Service層のコンストラクタで手こずっている。
+```UserService.java
+public void register(String name, String email, Role role, String rawPassword) {
+        User user = new User(name, email, role);
+        user.setPasswordHash(passwordEncoder.encode(rawPassword));
+        userRepository.save(user);
+    }
+```
