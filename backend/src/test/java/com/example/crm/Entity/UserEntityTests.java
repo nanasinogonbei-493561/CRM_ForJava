@@ -9,7 +9,6 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest; // ★B
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager; // ★同上
 import org.springframework.dao.DataIntegrityViolationException;
 
-import com.example.crm.Entity.User;
 import com.example.crm.Enum.Role;
 import com.example.crm.Repository.UserRepository;
 

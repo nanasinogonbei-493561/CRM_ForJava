@@ -1,9 +1,10 @@
 package com.example.crm.Entity;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.example.crm.Enum.Role;
 
@@ -19,8 +20,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.validation.constraints.Size;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -57,10 +56,13 @@ public class User {
 
         @Column(nullable = false)
         private int failed_login_count;
+        
+        @Column(name = "lock_time")
+        private LocalDateTime lockTime;
 
         @Column(nullable = false, name = "created_at", updatable = false)
         @CreationTimestamp(source = SourceType.DB)
-        private Instant created_at;
+        private LocalDateTime created_at;
 
         protected User() {} // JPA専用。業務コードからは使わない。
 
@@ -138,7 +140,15 @@ public class User {
             this.failed_login_count = failedLoginCount;
         }
 
-        public Instant getCreatedAt() {
+        public LocalDateTime getLockTime() {
+            return lockTime;
+        }
+
+        public void setLockTime(LocalDateTime lockTime) {
+            this.lockTime = lockTime;
+        }
+
+        public LocalDateTime getCreatedAt() {
             return this.created_at;
         }
         
@@ -146,11 +156,18 @@ public class User {
         private static final int MAX_FAILED_ATTEMPTS = 3;
 
         // ...既存のフィールド...
-
         public void recordLoginFailure() {
             this.failed_login_count++;
             if (this.failed_login_count >= MAX_FAILED_ATTEMPTS) {
                 this.locked = true;
             }
-        }     
+        }
+
+        @PreAuthorize("hasRole('ADMIN')")
+        public void unlockUser(User user) {
+            user.setLocked(true);
+            user.setFailedLoginCount(0);
+            user.setLockTime(null);
+            userRepository.save(user);
+        }
 }
