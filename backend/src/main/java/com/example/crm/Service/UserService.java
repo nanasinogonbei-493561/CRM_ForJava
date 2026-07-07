@@ -8,6 +8,7 @@ import com.example.crm.Entity.*;
 import com.example.crm.Enum.Role;
 import com.example.crm.Repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 // ユーザーテーブルのコト(処理、ロジック)を書く。
@@ -22,5 +23,16 @@ public class UserService {
         String passwordHash = passwordEncoder.encode(rawPassword);  // 先に作る
         User user = new User(name, email, role, passwordHash);  // 全部渡して一発で完成。
         userRepository.save(user);
+    }
+
+    // UserService.java（アプリケーション層）
+    @PreAuthorize("hasRole('ADMIN')")   // Spring管理BeanであるServiceでのみ有効
+    @Transactional
+    public void unlockUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("ユーザーが存在しません: id=" + userId));
+        user.unlock();   // ドメインロジックはEntityに委譲
+        // @Transactional内で取得した管理状態のEntityは、コミット時に
+        // dirty checkingで自動的にUPDATEされるため save() の明示は不要
     }
 }

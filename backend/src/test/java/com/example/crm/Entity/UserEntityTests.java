@@ -98,4 +98,17 @@ class UserEntityTests {
         user.recordLoginFailure();
         assertThat(user.isLocked()).isTrue();   // 3回目でロック
     }
+
+    @Test
+    void ロックと解除がEntity単体で完結する() {   // Spring・DB不要＝外部技術に依存していない証拠
+        User user = new User("テスト用ユーザー山田太郎", "a@example.com", Role.SALES, "hash");
+
+        for (int i = 0; i < 3; i++) user.recordLoginFailure();
+        assertThat(user.isLocked()).isTrue();
+
+        user.unlock();
+        assertThat(user.isLocked()).isFalse();
+        assertThat(user.getFailedLoginCount()).isZero();
+        assertThat(user.getLockTime()).isNull();
+    }
 }
