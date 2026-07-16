@@ -21,6 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
+// 将来domain層に移動。
 @Entity
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
@@ -152,11 +153,11 @@ public class User {
         return this.created_at;
     }
         
+    @Version private Long version;
     /** ログイン失敗がこの回数に達したらアカウントをロックする */
     private static final int MAX_FAILED_ATTEMPTS = 3;
 
     // ...既存のフィールド...
-    @Version
     public void recordLoginFailure() {
         this.failed_login_count++;
         if (this.failed_login_count >= MAX_FAILED_ATTEMPTS) {
