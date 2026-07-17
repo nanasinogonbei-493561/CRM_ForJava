@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import lombok.RequiredArgsConstructor;
 
-
+// 将来infrastructure/securityに分類
+// ログイン成功時と失敗時のログを記録。
 @Component
 @RequiredArgsConstructor
 public class AuthenticationEventListener {

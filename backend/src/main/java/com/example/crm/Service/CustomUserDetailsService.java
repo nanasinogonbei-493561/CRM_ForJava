@@ -10,6 +10,8 @@ import com.example.crm.Repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+// 将来infrastructure/securityに分類。Spring Security使用。
+// ユーザー見つからなかった時の例外処理を実装。
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {

@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+// 将来infrastructure/securityに分類
+// ログイン失敗時の例外処理実装。
 @Component
 @RequiredArgsConstructor
 public class LoginFailureHandler implements AuthenticationFailureHandler {

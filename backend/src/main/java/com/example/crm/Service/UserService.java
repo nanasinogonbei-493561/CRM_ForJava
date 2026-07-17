@@ -11,6 +11,7 @@ import com.example.crm.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+// 将来application層に移動。
 // ユーザーテーブルのコト(処理、ロジック)を書く。
 // ここで実際にencode()して保存する
 @Service
