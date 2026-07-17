@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+// 将来infrastructure/securityに分類。Spring Security使用。
 // パスワードハッシュの設定。道具を1個だけ用意
 @Configuration
 @EnableMethodSecurity   // これが無いと@PreAuthorizeはServiceに置いても動かない
