@@ -4,3 +4,4 @@
 application.properties
 # ただしテスト用はダミー値のみで、無いとテストが通らないので追跡する
 !backend/src/test/resources/application.properties
+.env
