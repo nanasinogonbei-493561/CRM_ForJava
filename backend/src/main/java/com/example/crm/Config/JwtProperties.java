@@ -14,7 +14,7 @@ public class JwtProperties {
     private String secret;
 
     @Value("${jwt.expiration}")
-    private long expriration;
+    private long expiration;
 
     // getter / setter を用意
     public String getSecret() {
@@ -24,10 +24,10 @@ public class JwtProperties {
         this.secret = secret;
     }
 
-    public long getExpriration() {
-        return expriration;
+    public long getExpiration() {
+        return expiration;
     }
-    public void setExpiration(long expriration) {
-        this.expriration = expriration;
+    public void setExpiration(long expiration) {
+        this.expiration = expiration;
     }
 }
