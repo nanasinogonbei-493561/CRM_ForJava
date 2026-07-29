@@ -24,7 +24,9 @@ import jakarta.persistence.Version;
 // 将来domain層に移動。
 @Entity
 @Table(name = "users")
-@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
+// @Version があるため、Hibernateは削除時に id と version の2つをバインドする。
+// プレースホルダの数と順序を生成SQLに合わせる必要がある。
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=? AND version=?")
 @SQLRestriction("is_deleted = false")
 // ユーザーテーブルのモノ(データ、状態)を定義。
 public class UserEntity {

@@ -1,2 +1,6 @@
 .DS_store
+
+# 本番設定にはDBパスワード等が入るため除外
 application.properties
+# ただしテスト用はダミー値のみで、無いとテストが通らないので追跡する
+!backend/src/test/resources/application.properties
