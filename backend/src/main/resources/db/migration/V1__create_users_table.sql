@@ -6,7 +6,7 @@
 
 CREATE TABLE users (
     id                  BIGINT          NOT NULL AUTO_INCREMENT              COMMENT 'ユーザーID',
-    name                VARCHAR(50)     NOT NULL                            COMMENT '担当者名',
+    username            VARCHAR(50)     NOT NULL                            COMMENT '担当者名',
     email               VARCHAR(255)    NOT NULL                            COMMENT 'メールアドレス（ログインID・一意）',
     role                VARCHAR(20)     NOT NULL                            COMMENT '権限：SALES / SUPPORT / ADMIN',
     is_deleted          BOOLEAN         NOT NULL DEFAULT FALSE              COMMENT '論理削除フラグ（退職者などはTRUE）',

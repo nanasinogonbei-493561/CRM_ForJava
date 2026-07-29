@@ -22,7 +22,7 @@ public class UserService {
 
     public void register(String name, String email, Role role, String rawPassword) {
         String passwordHash = passwordEncoder.encode(rawPassword);  // 先に作る
-        User user = new User(name, email, role, passwordHash);  // 全部渡して一発で完成。
+        UserEntity user = new UserEntity(name, email, role, passwordHash);  // 全部渡して一発で完成。
         userRepository.save(user);
     }
 
@@ -30,7 +30,7 @@ public class UserService {
     @PreAuthorize("hasRole('ADMIN')")   // Spring管理BeanであるServiceでのみ有効
     @Transactional
     public void unlockUser(Long userId) {
-        User user = userRepository.findById(userId)
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("ユーザーが存在しません: id=" + userId));
         user.unlock();   // ドメインロジックはEntityに委譲
         // @Transactional内で取得した管理状態のEntityは、コミット時に

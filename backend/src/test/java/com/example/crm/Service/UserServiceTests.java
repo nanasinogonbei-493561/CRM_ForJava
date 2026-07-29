@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.crm.Entity.User;
+import com.example.crm.Entity.UserEntity;
 import com.example.crm.Enum.Role;
 import com.example.crm.Repository.UserRepository;
 
@@ -35,7 +35,7 @@ class UserServiceTests {
         userService.register("テスト用ユーザー山田太郎", "taro@example.com",
                              Role.SALES, "rawPass123");
 
-        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+        ArgumentCaptor<UserEntity> captor = ArgumentCaptor.forClass(UserEntity.class);
         verify(userRepository).save(captor.capture());
         assertThat(captor.getValue().getPasswordHash()).isEqualTo("HASHED"); // 平文が保存されていないこと
     }

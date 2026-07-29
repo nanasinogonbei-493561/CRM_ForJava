@@ -1,6 +1,6 @@
 package com.example.crm.Repository;
 
-import com.example.crm.Entity.User;
+import com.example.crm.Entity.UserEntity;
 import com.example.crm.Enum.Role;
 
 import java.util.Optional;
@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 // 将来、datasource層に移動。
 // ユーザーテーブルのやりとりを操作。
-public interface UserRepository extends JpaRepository<User, Long> {
-        List<User> findByRole(Role role);
-        Optional<User> findByEmail(String email);
-        Object findByName(String name);
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+        List<UserEntity> findByRole(Role role);
+        Optional<UserEntity> findByEmail(String email);
+        Optional<UserEntity> findByUsername(String username);
 }
     

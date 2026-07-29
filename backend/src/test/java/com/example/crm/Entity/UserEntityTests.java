@@ -25,16 +25,16 @@ class UserEntityTests {
     UserRepository userRepository;
 
     /** @Size(min=10) を満たす12文字の名前でテスト用ユーザーを作る */
-    private User newUser(String email) {
-        return new User("テスト用ユーザー山田太郎", email, Role.SALES, "$2a$10$dummyHash");
+    private UserEntity newUser(String email) {
+        return new UserEntity("テスト用ユーザー山田太郎", email, Role.SALES, "$2a$10$dummyHash");
     }
 
     @Test
     void 保存するとidとcreated_atが自動で入る() {
-        User saved = userRepository.saveAndFlush(newUser("taro@example.com"));
+        UserEntity saved = userRepository.saveAndFlush(newUser("taro@example.com"));
         em.clear(); // 1次キャッシュを消して、本当にDBから読み直す
 
-        User found = userRepository.findById(saved.getId()).orElseThrow();
+        UserEntity found = userRepository.findById(saved.getId()).orElseThrow();
 
         assertThat(found.getId()).isNotNull();        // @GeneratedValue(IDENTITY)
         assertThat(found.getCreatedAt()).isNotNull(); // @CreationTimestamp(source = DB)
@@ -59,7 +59,7 @@ class UserEntityTests {
 
     @Test
     void deleteは物理削除ではなく論理削除になる() {
-        User saved = userRepository.saveAndFlush(newUser("delete@example.com"));
+        UserEntity saved = userRepository.saveAndFlush(newUser("delete@example.com"));
         Long id = saved.getId();
 
         userRepository.delete(saved); // ここで @SQLDelete の UPDATE 文が発行される
@@ -80,7 +80,7 @@ class UserEntityTests {
 
     @Test
     void nameが10文字未満だと保存できない() {
-        User shortName = new User("山田太郎", "yamada@example.com", Role.SALES, "hash");
+        UserEntity shortName = new UserEntity("山田太郎", "yamada@example.com", Role.SALES, "hash");
 
         // @Size(min=10) がflush（INSERT直前）のタイミングで検証される
         assertThatThrownBy(() -> userRepository.saveAndFlush(shortName))
@@ -89,7 +89,7 @@ class UserEntityTests {
 
     @Test
     void ログインに3回失敗するとロックされる() {
-        User user = newUser("lock@example.com");
+        UserEntity user = newUser("lock@example.com");
 
         user.recordLoginFailure();
         user.recordLoginFailure();
@@ -101,7 +101,7 @@ class UserEntityTests {
 
     @Test
     void ロックと解除がEntity単体で完結する() {   // Spring・DB不要＝外部技術に依存していない証拠
-        User user = new User("テスト用ユーザー山田太郎", "a@example.com", Role.SALES, "hash");
+        UserEntity user = new UserEntity("テスト用ユーザー山田太郎", "a@example.com", Role.SALES, "hash");
 
         for (int i = 0; i < 3; i++) user.recordLoginFailure();
         assertThat(user.isLocked()).isTrue();

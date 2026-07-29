@@ -27,7 +27,7 @@ import jakarta.persistence.Version;
 @SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
 @SQLRestriction("is_deleted = false")
 // ユーザーテーブルのモノ(データ、状態)を定義。
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ public class User {
         
     @Size(min=10, max=50)
     @Column(nullable = false)
-    private String name;
+    private String username;
 
     @Size(max=255)
     @Column(unique = true)
@@ -65,10 +65,10 @@ public class User {
     @CreationTimestamp(source = SourceType.DB)
     private LocalDateTime created_at;
 
-    protected User() {} // JPA専用。業務コードからは使わない。
+    protected UserEntity() {} // JPA専用。業務コードからは使わない。
 
-    public User(String name, String email, Role role, String passwordHash) {
-        this.name = name;
+    public UserEntity(String username, String email, Role role, String passwordHash) {
+        this.username = username;
         this.email = email;
         this.role = role;
         this.passwordHash = passwordHash;
@@ -77,20 +77,20 @@ public class User {
     @Override
     public String toString() {
         return String.format(
-            "User[id=%d, name='%s', email='%s', role='%s']",
-        id, name, email, role);
+            "User[id=%d, username='%s', email='%s', role='%s']",
+        id, username, email, role);
     }
 
     public Long getId() {
         return this.id;
     }
 
-    public String getName() {
-        return this.name;
+    public String getUsername() {
+        return this.username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserame(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
