@@ -89,7 +89,7 @@ public class UserEntity {
         return this.username;
     }
 
-    public void setUserame(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
