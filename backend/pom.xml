@@ -28,6 +28,9 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<tomcat.version>11.0.23</tomcat.version>
+		<logback.version>1.5.37</logback.version>
+		<log4j2.version>2.25.5</log4j2.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -100,6 +103,7 @@
             <artifactId>spring-boot-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
+		
 		<!-- Spring BootとFlywayの連携（Boot 4からは必須） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -148,6 +152,25 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+		<!-- アーキテクチャテスト -->
+		<dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
+            <version>1.4.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+        
+		<!-- 非同期処理ベースのHTTP Client -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webclient</artifactId>
         </dependency>
 
 	</dependencies>
