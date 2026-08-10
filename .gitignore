@@ -5,3 +5,16 @@ application.properties
 # ただしテスト用はダミー値のみで、無いとテストが通らないので追跡する
 !backend/src/test/resources/application.properties
 .env
+.pre-commit-config.yaml
+tfenv
+
+# Terraform
+# プロバイダのキャッシュ（サイズが大きく再取得可能）
+.terraform/
+# 実行状態。機密値が平文で入りうるため追跡しない（本来はリモートバックエンド管理）
+*.tfstate
+*.tfstate.backup
+# 変数の実値。ダミーの .tfvars.example のみ追跡する想定
+*.tfvars
+# main.tf の練習用リソースが生成するファイル
+hello.txt
