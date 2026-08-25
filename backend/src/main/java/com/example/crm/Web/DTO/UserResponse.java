@@ -10,14 +10,10 @@ public record UserResponse(
     String username,
     String email,
     Role role,
-    boolean is_deleted,
-    String passwordHash,
     boolean locked,
-    int failed_login_count,
-    LocalDateTime lockTime,
-    LocalDateTime created_at
+    LocalDateTime createdAt
 ) {
     public static UserResponse from(UserEntity u) {
-        return new UserResponse(u.getId(), u.getUsername(), u.getEmail(), u.getRole(), u.isDeleted(), u.getPasswordHash(), u.isLocked(), u.getFailedLoginCount(), u.getLockTime(), u.getCreatedAt());
+        return new UserResponse(u.getId(), u.getUsername(), u.getEmail(), u.getRole(), u.isLocked(), u.getCreatedAt());
     }
 }

@@ -20,10 +20,34 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public void register(String name, String email, Role role, String rawPassword) {
+    public UserEntity register(String name, String email, Role role, String rawPassword) {
         String passwordHash = passwordEncoder.encode(rawPassword);  // 先に作る
         UserEntity user = new UserEntity(name, email, role, passwordHash);  // 全部渡して一発で完成。
-        userRepository.save(user);
+        return userRepository.save(user);
+    }
+
+    /**
+     * ログイン成功時に連続失敗カウントを 0 に戻す。
+     * 「連続」3回を数えたいので、1度でも成功したらリセットする必要がある。
+     */
+    @Transactional
+    public void resetLoginFailures(String email) {
+        userRepository.findByEmail(email).ifPresent(user -> {
+            if (user.getFailedLoginCount() > 0) {
+                user.setFailedLoginCount(0);
+                // @Transactional内の管理状態EntityなのでdirtyCheckingでUPDATEされる
+            }
+        });
+    }
+
+    /**
+     * ログイン失敗時に連続失敗カウントを進め、規定回数に達したらロックする。
+     * ルール本体は UserEntity.recordLoginFailure() が持っている。
+     */
+    @Transactional
+    public void recordLoginFailure(String email) {
+        // 3回失敗したらロックする。
+        userRepository.findByEmail(email).ifPresent(UserEntity::recordLoginFailure);
     }
 
     // UserService.java（アプリケーション層）
