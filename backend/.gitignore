@@ -34,3 +34,8 @@ build/
 src/main/resources/application.properties
 src/main/java/com/example/memo.md
 src/main/resources/META-INF/additional-spring-configuration-metadata.json
+# アプリのログ出力先。app.log と日次ローテートの *.log.YYYY-MM-DD.N.gz を丸ごと除外する。
+# ディレクトリ名は logs（複数形）。log/ では一致しないので注意。
+logs/
+*.log
+.env
