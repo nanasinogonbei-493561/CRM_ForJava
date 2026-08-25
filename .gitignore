@@ -4,7 +4,11 @@
 application.properties
 # ただしテスト用はダミー値のみで、無いとテストが通らないので追跡する
 !backend/src/test/resources/application.properties
+# 環境変数ファイル。.env だけでなく test.env / prod.env のような
+# 接頭辞つきも一括で除外する。.env.example は末尾が .example なので
+# どちらのパターンにも一致せず、意図どおり追跡され続ける。
 .env
+*.env
 .pre-commit-config.yaml
 tfenv
 
@@ -18,3 +22,8 @@ tfenv
 *.tfvars
 # main.tf の練習用リソースが生成するファイル
 hello.txt
+
+# IDE（IntelliJ IDEA）
+# workspace.xml などに個人の作業状態と絶対パス（/Users/<名前>/...）が入る。
+# 環境ごとに再生成されるためリポジトリで共有する意味がない。
+.idea/
