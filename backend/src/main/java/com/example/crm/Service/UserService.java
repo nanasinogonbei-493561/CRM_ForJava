@@ -47,7 +47,10 @@ public class UserService {
     @Transactional
     public void recordLoginFailure(String email) {
         // 3回失敗したらロックする。
-        userRepository.findByEmail(email).ifPresent(UserEntity::recordLoginFailure);
+        // メソッド参照(UserEntity::recordLoginFailure)ではなくラムダを使う。
+        // 前者だとConsumerの引数がそのままレシーバ(this)になり、JDTのnull解析が
+        // 「JDKのConsumerは@NonNull宣言を持たないのでnon-nullを保証できない」と警告するため。
+        userRepository.findByEmail(email).ifPresent(user -> user.recordLoginFailure());
     }
 
     // UserService.java（アプリケーション層）
