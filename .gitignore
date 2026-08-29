@@ -1,9 +1,14 @@
 .DS_store
 
-# 本番設定にはDBパスワード等が入るため除外
+# application.properties は「どの階層でも」一致する裸のパターンで除外する。
+# 秘密を直書きした設定ファイルを誤って追跡しないための保険。
 application.properties
-# ただしテスト用はダミー値のみで、無いとテストが通らないので追跡する
+# ただし以下は例外として追跡する。
+#  - test: ダミー値のみで、無いとテストが通らない
+#  - main: 秘密は全て ${ENV_VAR} 参照で、実値は .env にしか無い。
+#          OSIV や ddl-auto のような「全環境共通の設計判断」を共有するため。
 !backend/src/test/resources/application.properties
+!backend/src/main/resources/application.properties
 # 環境変数ファイル。.env だけでなく test.env / prod.env のような
 # 接頭辞つきも一括で除外する。.env.example は末尾が .example なので
 # どちらのパターンにも一致せず、意図どおり追跡され続ける。
