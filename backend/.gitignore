@@ -31,7 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
-src/main/resources/application.properties
+# application.properties はルートの .gitignore で「除外＋main/test だけ例外」を
+# 一元管理する。ここで再度除外すると後段の否定パターンが効かなくなるため書かない。
 src/main/java/com/example/memo.md
 src/main/resources/META-INF/additional-spring-configuration-metadata.json
 # アプリのログ出力先。app.log と日次ローテートの *.log.YYYY-MM-DD.N.gz を丸ごと除外する。

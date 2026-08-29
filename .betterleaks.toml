@@ -45,7 +45,10 @@ commits = ["b11eb2c6b90655c161585848c4697afb92baca23"]
 [[allowlists]]
 description = ".env.example のプレースホルダ値"
 condition = "AND"
-paths = ['''^\.env\.example$''']
+# 直下の .env.example だけでなく backend/.env.example も対象にする。
+# アプリは backend/ を作業ディレクトリとして起動し、spring.config.import の
+# file:.env はそこから解決されるため、テンプレートも同じ階層に置いている。
+paths = ['''(^|/)\.env\.example$''']
 stopwords = ["changeme"]
 
 # 過去にコミットされてしまったアプリログ。e91c7e4 で追跡対象から
