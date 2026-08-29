@@ -65,15 +65,14 @@ class ArchitectureTests {
                     // UserService を使っており、これは Service 経由なので問題ないため。
                     .whereLayer("Service").mayOnlyBeAccessedByLayers("Api", "Config")
 
-                    // Repository を呼んでよいのは Service だけ。Config を意図的に含めていない。
-                    // このため現在 3 件の違反が残り、このルールは赤いままになる:
-                    //   - AdminBootstrap (3件) ... 起動時の管理者登録で UserRepository を直接使用
-                    // 赤を「未解決の設計負債」として残し、解消の起点にする。
-                    //
-                    // このルールが最初に炙り出した LoginFailureHandler (4件) は削除済み。
-                    // formLogin が未配線で一度も呼ばれないデッドコードであり、かつ
-                    // AuthenticationEventListener が同じ責務を認証方式に依存しない形で
-                    // 既に実装していたため(2026-08-29)。
+                    // Repository を呼んでよいのは Service だけ。Config は含めない。
+                    // 導入時に出た Config からの違反 7 件は、いずれもこのルールが
+                    // 炙り出した実在の問題だったため、コード側を直して解消した:
+                    //   - LoginFailureHandler (4件) ... formLogin が未配線で一度も呼ばれず、
+                    //     かつ AuthenticationEventListener が同じ責務を認証方式に依存しない
+                    //     形で実装済みだったため削除
+                    //   - AdminBootstrap (3件) ... ADMIN の存在確認を
+                    //     UserService.existsByRole() 経由に変更
                     .whereLayer("Repository").mayOnlyBeAccessedByLayers("Service")
 
                     .because("依存は Api → Service → Repository の一方向。逆流すると層を単独で差し替え・テストできなくなる。");
