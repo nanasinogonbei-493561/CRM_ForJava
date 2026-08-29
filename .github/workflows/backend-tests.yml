@@ -1,0 +1,61 @@
+name: Backend Tests
+
+# 既定ブランチは main。develop も運用されているため両方を対象にする。
+# paths フィルタは意図的に付けていない。必須チェックに指定した場合、
+# 対象外のファイルだけを変更した PR でチェックが永遠に実行されず、
+# マージできないまま止まるため。
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+# 同じ PR に続けて push したとき、古い実行を打ち切って課金と待ち時間を節約する。
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Maven Verify (JDK 21)
+    runs-on: ubuntu-latest
+    # ハングした実行が課金枠を食い潰さないよう上限を切る。
+    # 現状の所要時間は1分未満なので10分あれば十分。
+    timeout-minutes: 10
+    # 必要な権限だけを宣言する。テスト実行はリポジトリを読むだけでよい。
+    permissions:
+      contents: read
+    # pom.xml は backend 配下にあるため、全ステップの基準を移す。
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # pom.xml の <java.version> が 21 なので、CI もそれに合わせる。
+      # ローカルの JDK 24 で通っても、宣言した対象で動く保証にはならない。
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: temurin
+          # ~/.m2/repository を pom.xml のハッシュをキーにキャッシュする
+          cache: maven
+
+      # --batch-mode        : 対話プロンプトを出さない(CI では応答できない)
+      # --no-transfer-progress : 依存ダウンロードの進捗ログを抑制しログを読みやすく保つ
+      # verify : test に加えて package まで通し、実行可能 jar が作れることも確認する
+      - name: Run tests
+        run: ./mvnw --batch-mode --no-transfer-progress verify
+
+      # 失敗時、どのテストがなぜ落ちたかをログを遡らずに確認できるようにする。
+      # ArchUnit の違反一覧は行数が多いため、ファイルで取れると調査が速い。
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: backend/target/surefire-reports/
+          retention-days: 7
