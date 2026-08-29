@@ -68,6 +68,15 @@ public class UserService {
         // dirty checkingで自動的にUPDATEされるため save() の明示は不要
     }
 
+    /**
+     * 指定ロールの利用者が既に存在するか。
+     * 初期管理者を作ってよいかの判定に使う。判定を Service に置くことで、
+     * 呼び出し側(Config)が Repository を直接持たずに済む。
+     */
+    public boolean existsByRole(Role role) {
+        return userRepository.existsByRole(role);
+    }
+
     /** 一覧取得。参照のみなので副作用は無い。 */
     public List<UserEntity> findAll() {
         return userRepository.findAll();

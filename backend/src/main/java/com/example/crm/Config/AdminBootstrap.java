@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.example.crm.Entity.UserEntity;
 import com.example.crm.Enum.Role;
-import com.example.crm.Repository.UserRepository;
 import com.example.crm.Service.UserService;
 
 import org.slf4j.Logger;
@@ -25,7 +24,6 @@ public class AdminBootstrap implements ApplicationRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminBootstrap.class);
 
-    private final UserRepository userRepository;
     private final UserService userService;
 
     // 未設定なら空文字。パスワードは絶対にログへ出さないこと。
@@ -50,7 +48,9 @@ public class AdminBootstrap implements ApplicationRunner {
         // ② ADMIN が1人もいないときだけ作る。
         // ApplicationRunner は起動のたびに走るため、このガードが無いと
         // 2回目の起動で email の unique 制約に衝突する。
-        if (userRepository.findByRole(Role.ADMIN).isEmpty()) {
+        // 判定は Service に委譲する。Config が Repository を直接握ると
+        // 永続化層への経路が2本になり、業務ルールの適用漏れを招く。
+        if (!userService.existsByRole(Role.ADMIN)) {
             // ③ 生パスワードのハッシュ化は UserService.register が担当する。
             // ここで userRepository.save() を直接呼ぶと平文が保存されてしまう。
             UserEntity admin = userService.register(
