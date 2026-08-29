@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.crm.Entity.*;
 import com.example.crm.Enum.Role;
+import com.example.crm.Exception.UserEntityNotFoundException;
 import com.example.crm.Repository.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -62,5 +66,42 @@ public class UserService {
         user.unlock();   // ドメインロジックはEntityに委譲
         // @Transactional内で取得した管理状態のEntityは、コミット時に
         // dirty checkingで自動的にUPDATEされるため save() の明示は不要
+    }
+
+    /** 一覧取得。参照のみなので副作用は無い。 */
+    public List<UserEntity> findAll() {
+        return userRepository.findAll();
+    }
+
+    /** 1件取得。存在しない場合の扱いは呼び出し側に委ねるため Optional のまま返す。 */
+    public Optional<UserEntity> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    /**
+     * 削除。存在確認と削除をひとつのトランザクションにまとめることで、
+     * 「存在する」と判定した直後に他のリクエストが消す競合を防ぐ。
+     */
+    @Transactional
+    public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserEntityNotFoundException(id);
+        }
+        userRepository.deleteById(id);
+    }
+
+    /**
+     * 氏名とメールアドレスを更新する。
+     * 書き換える対象そのものが必要なので、existsById ではなく findById で取り出す。
+     */
+    @Transactional
+    public UserEntity update(Long id, String username, String email) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new UserEntityNotFoundException(id));
+        user.setUsername(username);
+        user.setEmail(email);
+        // unlockUser() と同じく、管理状態の Entity は
+        // dirty checking でコミット時に UPDATE されるため save() は不要
+        return user;
     }
 }
