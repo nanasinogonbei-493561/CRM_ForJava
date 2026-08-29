@@ -1,5 +1,7 @@
 {
     "snyk.advanced.autoSelectOrganization": true,
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": false
 }
