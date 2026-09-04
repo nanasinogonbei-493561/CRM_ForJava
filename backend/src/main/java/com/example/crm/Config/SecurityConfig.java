@@ -68,7 +68,6 @@ public class SecurityConfig {
             // 既定の未認証応答は Http403ForbiddenEntryPoint による 403 だが、
             // 「認証されていない」は 401、「認証済みだが権限が足りない」は 403 という
             // RFC 7235 の区別に合わせて 401 を返す。
-            // TODO: RFC 7235 では 401 に WWW-Authenticate ヘッダを付けるのが本来。
             //       Bearer 運用なら `WWW-Authenticate: Bearer` を返すべきだが、
             //       HttpStatusEntryPoint は付けない。必要になったら独自実装に差し替える。
             .exceptionHandling(ex -> ex
