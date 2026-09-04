@@ -24,7 +24,7 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    // 秘密鍵を生成（application.propertiesの値をUTF-8バイト列としてHMAC-SHA256鍵に変換）
+    // 秘密鍵を生成（application.propertiesの値をUTF-8バイト列としてHMAC-SHA512鍵に変換）
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }

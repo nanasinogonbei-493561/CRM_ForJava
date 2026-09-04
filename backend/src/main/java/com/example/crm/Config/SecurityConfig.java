@@ -1,10 +1,10 @@
 package com.example.crm.Config;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.crm.Service.CustomUserDetailsService;
@@ -60,10 +61,18 @@ public class SecurityConfig {
             // STATELESS にすると JSESSIONID が発行されず、SecurityContext も
             // リクエスト間で引き継がれない＝毎回トークンの提示が必要になる。
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            // curlやRESTクライアントから Authorization ヘッダで認証できるようにする
-            // 注意: Basic 認証が残っている間は、JWT が壊れていてもリクエストが
-            //       通ってしまう。JWT のテストでは Basic ヘッダを送らないこと。
-            .httpBasic(withDefaults())
+            // httpBasic は外した。残しておくと Basic ヘッダを送るだけで認証が通ってしまい、
+            // JWT が壊れていてもリクエストが成功する＝テストが素通りする。
+            // 認証経路は Bearer トークン一本に絞る。
+            //
+            // 既定の未認証応答は Http403ForbiddenEntryPoint による 403 だが、
+            // 「認証されていない」は 401、「認証済みだが権限が足りない」は 403 という
+            // RFC 7235 の区別に合わせて 401 を返す。
+            // TODO: RFC 7235 では 401 に WWW-Authenticate ヘッダを付けるのが本来。
+            //       Bearer 運用なら `WWW-Authenticate: Bearer` を返すべきだが、
+            //       HttpStatusEntryPoint は付けない。必要になったら独自実装に差し替える。
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
             .authorizeHttpRequests(auth -> auth
                 //   ルールは上から順に評価され、最初に一致した1件だけが適用される。
                 //   そのため .anyRequest() は必ず最後に置くこと。
