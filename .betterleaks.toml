@@ -62,3 +62,20 @@ stopwords = ["changeme"]
 [[allowlists]]
 description = "履歴に残るアプリログ（Hibernate のエラーメッセージの誤検知）"
 paths = ['''^backend/logs/''', '''\.log$''']
+
+# テストコード中のダミーパスワード。v1.8 で追加された generic-password ルールが
+# `RAW_PASSWORD = "rawPass123"` という定数宣言の形を値ごと拾う。
+# 既存の UserServiceTests でも同じ値を使っているが、そちらは
+# `encode("rawPass123")` という引数の形なので今のところ検知されていない。
+# ルールが変われば拾われうるので、テストツリー全体を対象にしておく。
+#
+# 実在の資格情報ではなく、H2 のインメモリ DB に register() するためだけの値。
+#
+# .env.example の例外と同じく condition = "AND" が要。paths だけだと
+# テストコード全体が素通りし、将来テストに本物の資格情報が紛れ込んでも
+# 検知できなくなる。値まで固定して「このダミー値だけ」を除外する。
+[[allowlists]]
+description = "テストコードのダミーパスワード"
+condition = "AND"
+paths = ['''^backend/src/test/''']
+stopwords = ["rawPass123"]
