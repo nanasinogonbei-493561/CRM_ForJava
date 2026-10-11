@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+login {
+    max-w-400,
+    margin: 40px auto,
+    p-20,
+    border-solid,
+    rounded-1g,
+    
+}
