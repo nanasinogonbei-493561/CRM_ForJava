@@ -1,10 +1,14 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    tailwindcss()
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -17,8 +21,6 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080', // backend のポートに合わせる
         changeOrigin: true,
-        // backend 側に /api プレフィックスが無いなら↓を有効化
-        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

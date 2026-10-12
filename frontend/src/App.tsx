@@ -1,12 +1,12 @@
-import './App.css'
-import Login from "./Login.tsx"
-import { api } from '@/lib/apiClient';
+import { Routes, Route } from 'react-router-dom'
+import Login from './views/Login'
+import Top from './views/Top'
 
-const { data, error } = await api.GET('/users/{user_id}', {
-  params: { path: { user_id: 1 } },
-})
-// data は User 型として推論される
-
-export default function App () {
-
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/Top" element={<Top />} />
+    </Routes>
+  )
 }
