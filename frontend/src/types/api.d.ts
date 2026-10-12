@@ -7,6 +7,12 @@ export interface paths {
   "/users/{user_id}": {
     get: operations["get_user"];
   };
+  "/auth/login": {
+    post: operations["login"];
+  };
+  "/auth/logout": {
+    post: operations["logout"];
+  };
 }
 
 export interface components {
@@ -31,6 +37,35 @@ export interface operations {
       404: {
         content: never;
       };
+    };
+  };
+
+  login: {
+    requestBody: {
+      content: {
+        "application/json": { 
+          email: string;
+          password: string;
+        };
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            token: string;
+          };
+        };
+      };
+      401: {
+        content: never
+      };
+    };
+  };
+
+  logout: {
+    responses: {
+      200: {content: never};
     };
   };
 }
