@@ -21,6 +21,8 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080', // backend のポートに合わせる
         changeOrigin: true,
+        // backend のエンドポイントは /auth/login のように /api を含まないため、転送前に外す
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
