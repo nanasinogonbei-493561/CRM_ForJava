@@ -58,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // ロック済み・無効化済みアカウントを弾く。AuthenticationManager を通さない以上、
     // この確認は自分でやる必要がある（3回失敗ロックは locked 列に立つ）。
-    private final AccountStatusUserDetailsChecker statusChecker = new AccountStatusUserDetailsChecker();
+    private static final AccountStatusUserDetailsChecker STATUS_CHECKER = new AccountStatusUserDetailsChecker();
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
@@ -89,7 +89,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String email = jwtUtil.extractUsername(token);
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            statusChecker.check(userDetails);   // ロック済みなら LockedException
+            STATUS_CHECKER.check(userDetails);   // ロック済みなら LockedException
 
             if (jwtUtil.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication =
