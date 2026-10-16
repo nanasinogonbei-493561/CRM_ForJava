@@ -13,6 +13,9 @@ export interface paths {
   "/auth/logout": {
     post: operations["logout"];
   };
+  "/users": {
+    post: operations["register"];
+  };
 }
 
 export interface components {
@@ -66,6 +69,31 @@ export interface operations {
   logout: {
     responses: {
       200: {content: never};
+    };
+  };
+
+  register: {
+    requestBody: {
+      content: {
+        "application/json": {
+          username: string;
+          email: string;
+          role: "SALES" | "SUPPORT" | "ADMIN";
+          rawPassword: string;
+        };
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": {
+            token: string;
+          };
+        };
+      };
+      401: {
+        content: never
+      };
     };
   };
 }

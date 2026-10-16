@@ -12,10 +12,12 @@ export default function Top() {
             navigate('/')
         }
     }
+    const goRegister = () => navigate('/users/new')
     return (
         <div className="container">
-        <h1>Top Page</h1>
-        <button onClick={logout}>ログアウト</button>
+            <h1>Top Page</h1>
+            <button onClick={logout}>ログアウト</button>
+            <button onClick={goRegister}>ユーザー登録</button>
         </div>
     );
 }
