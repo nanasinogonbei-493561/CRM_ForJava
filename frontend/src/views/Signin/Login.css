@@ -4,7 +4,7 @@ h1{
   }
   
   .formContainer h1{
-    height: 100vh;
+    height: 50vh;
     width: 100%;
     display: flex;
     align-items: center;
