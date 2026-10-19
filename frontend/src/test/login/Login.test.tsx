@@ -11,14 +11,14 @@ describe('Login 記入', () => {
         render(<MemoryRouter><Login /></MemoryRouter>)
         
         await user.type (
-            await screen.getByLabelText('Email'),
+            await screen.getByLabelText('メールアドレス'),
             "tests@gmail.com"
         )
         await user.type (
             await screen.getByLabelText('パスワード'),
             'passwords'
         )
-        expect(screen.getByLabelText('Email')).toHaveValue('tests@gmail.com');
+        expect(screen.getByLabelText('メールアドレス')).toHaveValue('tests@gmail.com');
         expect(screen.getByLabelText('パスワード')).toHaveValue('passwords');
     });
 });
@@ -39,7 +39,7 @@ describe('Login ログイン失敗', () => {
         const user = userEvent.setup()
         render(<MemoryRouter><Login /></MemoryRouter>)
         await user.type(
-            await screen.getByLabelText('Email'),
+            await screen.getByLabelText('メールアドレス'),
             'test@gmail.com'
         )
         await user.type(
@@ -50,7 +50,7 @@ describe('Login ログイン失敗', () => {
             await screen.getByRole('button', { name: 'ログイン' })
         )
 
-        expect(screen.getByLabelText('Email')).toHaveValue('test@gmail.com');
+        expect(screen.getByLabelText('メールアドレス')).toHaveValue('test@gmail.com');
         expect(screen.getByLabelText('パスワード')).toHaveValue('');
         expect(await screen.findByText('メールアドレスまたはパスワードが正しくありません。もう一度入力してください。')).toBeInTheDocument()
     });

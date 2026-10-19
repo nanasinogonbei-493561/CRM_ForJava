@@ -19,10 +19,10 @@ describe('register ユーザー登録', () => {
         const pw = 'passwords'
         const user = userEvent.setup()
         render(
-            <MemoryRouter>
+            <MemoryRouter initialEntries={["/users/new"]}>
                 <Routes>
-                    <Route path="/" element={<UserForm />} />
-                    <Route path="/Top" element={<p>Top画面</p>} />
+                    <Route path="/users/new" element={<UserForm />} />
+                    <Route path="/" element={<p>Top画面</p>} />
                 </Routes>
             </MemoryRouter>
         )
@@ -39,7 +39,7 @@ describe('register ユーザー登録', () => {
         expect(screen.getByLabelText('パスワード', { exact: true })).toHaveValue(pw)
         expect(screen.getByLabelText('パスワード確認')).toHaveValue(pw)
 
-        await user.click(screen.getByRole('button'))
+        await user.click(screen.getByRole('button', { name: '登録' }))
 
         // confirmPassword は送信前に取り除かれる
         expect(api.POST).toHaveBeenCalledWith('/users', {
@@ -51,5 +51,22 @@ describe('register ユーザー登録', () => {
             },
         })
         expect(await screen.findByText('Top画面')).toBeInTheDocument()
+    });
+
+    test('キャンセルで Top 画面に戻れる', async () => {
+        const user = userEvent.setup()
+        render(
+            <MemoryRouter initialEntries={["/users/new"]}>
+                <Routes>
+                    <Route path="/users/new" element={<UserForm />} />
+                    <Route path="/" element={<p>Top画面</p>} />
+                </Routes>
+            </MemoryRouter>
+        )
+
+        await user.click(screen.getByRole('button', { name: 'キャンセル' }))
+
+        expect(await screen.findByText('Top画面')).toBeInTheDocument()
+        expect(api.POST).not.toHaveBeenCalled()
     });
 })

@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+/* =========================================================
+   デザイントークン（Tailwind v4 は CSS の @theme で設定する）
+   ここで定義した値は bg-accent / text-ink / font-logo のように
+   Tailwind のクラスとして使えるようになる
+   ========================================================= */
+@theme {
+  --color-accent: #d6485f;   /* 会員登録・ログインボタンのピンク */
+  --color-ink: #1a1a1a;      /* 文字色 */
+  --color-line: #333333;     /* 区切り線 */
+  --color-field: #cfcfcf;    /* 入力欄の枠 */
+  --color-placeholder: #eceef3;
+
+  --font-sans: "Noto Sans JP", sans-serif;
+  --font-logo: "Oswald", sans-serif;
+  --font-en: "Roboto", sans-serif;
+
+  --container-site: 1160px;  /* max-w-site */
+}
+
+body {
+  @apply bg-white font-sans text-ink;
+}
