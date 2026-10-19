@@ -1,0 +1,42 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+# application.properties はルートの .gitignore で「除外＋main/test だけ例外」を
+# 一元管理する。ここで再度除外すると後段の否定パターンが効かなくなるため書かない。
+src/main/java/com/example/memo.md
+src/main/resources/META-INF/additional-spring-configuration-metadata.json
+# アプリのログ出力先。app.log と日次ローテートの *.log.YYYY-MM-DD.N.gz を丸ごと除外する。
+# ディレクトリ名は logs（複数形）。log/ では一致しないので注意。
+logs/
+*.log
+.env

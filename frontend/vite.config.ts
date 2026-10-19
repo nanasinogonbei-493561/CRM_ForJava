@@ -1,0 +1,35 @@
+import react from '@vitejs/plugin-react'
+import { fileURLToPath, URL } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vitest/config';
+
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    react(),
+    tailwindcss()
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  server: {
+    port: 5173,
+    proxy: {
+      // /api で始まるリクエストを backend に転送
+      '/api': {
+        target: 'http://localhost:8080', // backend のポートに合わせる
+        changeOrigin: true,
+        // backend のエンドポイントは /auth/login のように /api を含まないため、転送前に外す
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./src/test/setupTest.ts",
+  },
+})
