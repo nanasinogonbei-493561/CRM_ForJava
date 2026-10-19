@@ -20,10 +20,20 @@ export interface paths {
 
 export interface components {
   schemas: {
+    // backend の UserResponse に対応。passwordHash は含まれない
     User: {
       id: number;
-      name: string;
+      username: string;
       email: string;
+      role: "SALES" | "SUPPORT" | "ADMIN";
+      locked: boolean;
+      createdAt: string;
+    };
+    // backend の LoginResponse に対応。expiresAt は ISO-8601(Instant)
+    LoginResponse: {
+      token: string;
+      tokenType: string;
+      expiresAt: string;
     };
   };
 }
@@ -55,9 +65,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": {
-            token: string;
-          };
+          "application/json": components["schemas"]["LoginResponse"];
         };
       };
       401: {
@@ -86,12 +94,16 @@ export interface operations {
     responses: {
       201: {
         content: {
-          "application/json": {
-            token: string;
-          };
+          "application/json": components["schemas"]["User"];
         };
       };
+      400: {
+        content: never
+      };
       401: {
+        content: never
+      };
+      403: {
         content: never
       };
     };

@@ -20,7 +20,7 @@ api.use({
   onResponse({ response }) {
     if (response.status === 401 && !response.url.endsWith('/auth/login')) {
       clearToken()
-      window.location.href = '/'
+      window.location.href = '/login'
     }
   },
 })
